@@ -1,5 +1,10 @@
+
+file = "newrelic_agent.log"
+if ARGV.size() > 0
+    file = ARGV[0]
+end
 weaved = Set(String).new()
-File.each_line("newrelic_agent.log") do |line|
+File.each_line(file) do |line|
     if line.includes?("weaved")
         i = line.index(".instrumentation.")
         if i 

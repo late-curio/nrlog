@@ -11,7 +11,6 @@ File.each_line(file) do |line|
             j = line.index(":", offset: i)
             if j
                 weaved.add(line[(i + 17)..(j - line.size- 1)])
-                # weaved.add(line)
             end  
         end
     end

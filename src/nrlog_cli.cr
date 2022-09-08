@@ -4,8 +4,7 @@ file = "newrelic_agent.log"
 if ARGV.size() > 0
   file = ARGV[0]
 end
-log = Nrlog::AgentLog.new(file)
-log.process()
+log = Nrlog.load(file)
 puts "#{log.transaction_count} transactions started"
 puts ""
 puts "Instrumentation"

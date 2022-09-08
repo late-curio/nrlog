@@ -10,6 +10,6 @@ module Instrumentation
     if i && j
       return input[(i + 17)..(j - input.size- 1)]
     end
-    ""
+    return ""
   end
 end

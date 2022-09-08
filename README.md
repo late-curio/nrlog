@@ -1,13 +1,39 @@
-# New Relic Agent log parser
+# nrlog
 
-Simple utility for extracting info from an agent log file at FINEST level.
-Used for troubleshooting customer issues.
+TODO: Write a description here
 
-Not much yet, but quickly listing loaded instrumentation modules is a great start.
+## Installation
+
+1. Add the dependency to your `shard.yml`:
+
+   ```yaml
+   dependencies:
+     nrlog:
+       github: your-github-user/nrlog
+   ```
+
+2. Run `shards install`
 
 ## Usage
 
-`nrl <log-file-location>`
+```crystal
+require "nrlog"
+```
 
-`nrl` # defaults to "newrelic_agent.log" in current directory
+TODO: Write usage instructions here
 
+## Development
+
+TODO: Write development instructions here
+
+## Contributing
+
+1. Fork it (<https://github.com/your-github-user/nrlog/fork>)
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
+
+## Contributors
+
+- [twcrone](https://github.com/your-github-user) - creator and maintainer

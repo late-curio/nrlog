@@ -1,0 +1,13 @@
+name: nrlog
+version: 0.1.0
+
+targets:
+  nrlog:
+    main:  src/nrlog_cli.cr
+
+authors:
+  - twcrone <twcrone@gmail.com>
+
+crystal: 1.5.0
+
+license: MIT

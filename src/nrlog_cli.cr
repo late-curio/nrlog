@@ -1,3 +1,6 @@
+require "./extension"
+require "./instrumentation"
+
 file = "newrelic_agent.log"
 if ARGV.size() > 0
   file = ARGV[0]
@@ -6,14 +9,8 @@ weaved = Set(String).new()
 transaction_count = 0
 transaction_activity = Array(String).new()
 File.each_line(file) do |line|
-  if line.includes?("weaved")
-    i = line.index(".instrumentation.")
-    if i
-      j = line.index(":", offset: i)
-      if j
-        weaved.add(line[(i + 17)..(j - line.size- 1)])
-      end
-    end
+  if Instrumentation.weaved?(line)
+    weaved.add(Instrumentation.parse(line))
   end
   if line.includes?("TransactionActivity@") && line.includes?("starting")
     transaction_count += 1

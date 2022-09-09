@@ -4,17 +4,19 @@ file = "newrelic_agent.log"
 if ARGV.size() > 0
   file = ARGV[0]
 end
-log = Nrlog.load(file)
-puts "#{log.transaction_count} transactions started"
+log = Nrlog::AgentLog.new(file)
+log.load()
+session = log.first
+puts "#{session.transaction_count} transactions started"
 puts ""
 puts "Instrumentation"
 puts "---------------"
-log.weaved.to_a().sort().each do |pkg|
+session.weaved.to_a().sort().each do |pkg|
   puts pkg
 end
 puts ""
 puts "Extensions (not loaded initially)"
 puts "---------------------------------"
-log.extensions.to_a().sort().each do |pkg|
+session.extensions.to_a().sort().each do |pkg|
   puts pkg
 end

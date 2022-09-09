@@ -4,23 +4,36 @@ require "./instrumentation"
 module Nrlog
   VERSION = "0.1.0"
 
-  def self.load(filename : String)
-    log = AgentLog.new()
-    File.each_line(filename) do |line|
-      if Instrumentation.weaved?(line)
-        log.weaved.add(Instrumentation.parse(line))
-      end
-      if Extension.weaved?(line)
-        log.extensions.add(Extension.parse(line))
-      end
-      if line.includes?("TransactionActivity@") && line.includes?("starting")
-        log.increment_transaction_count
-      end
+  class AgentLog
+    getter sessions
+
+    def initialize(filename : String)
+      @filename = filename
+      @sessions = Set(AgentSession).new()
     end
-    return log
+
+    def load()
+      session = AgentSession.new()
+      File.each_line(@filename) do |line|
+        if Instrumentation.weaved?(line)
+          session.weaved.add(Instrumentation.parse(line))
+        end
+        if Extension.weaved?(line)
+          session.extensions.add(Extension.parse(line))
+        end
+        if line.includes?("TransactionActivity@") && line.includes?("starting")
+          session.increment_transaction_count
+        end
+      end
+      @sessions.add(session)
+    end
+
+    def first
+      @sessions.first
+    end
   end
 
-  class AgentLog
+  class AgentSession
     getter weaved, extensions, transaction_count
     def initialize()
       @weaved = Set(String).new()

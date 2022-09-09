@@ -6,26 +6,38 @@ module Nrlog
 
   class AgentLog
     getter sessions
-
     def initialize(filename : String)
       @filename = filename
-      @sessions = Set(AgentSession).new()
+      @sessions = Array(AgentSession).new
     end
 
     def load()
       session = AgentSession.new()
+      count = 0
+      @sessions.push(session)
+
       File.each_line(@filename) do |line|
-        if Instrumentation.weaved?(line)
-          session.weaved.add(Instrumentation.parse(line))
+        if start_session?(line)
+          if count > 0
+            session = AgentSession.new()
+            @sessions.push(session)
+          end  
+          count += 1
         end
-        if Extension.weaved?(line)
-          session.extensions.add(Extension.parse(line))
-        end
-        if line.includes?("TransactionActivity@") && line.includes?("starting")
-          session.increment_transaction_count
+        if session
+          if Instrumentation.weaved?(line)
+            session.weaved.add(Instrumentation.parse(line))
+          elsif Extension.weaved?(line)
+            session.extensions.add(Extension.parse(line))
+          elsif line.includes?("TransactionActivity@") && line.includes?("starting")
+            session.increment_transaction_count
+          end
         end
       end
-      @sessions.add(session)
+    end
+
+    private def start_session?(line : String)
+      line.includes?("Writing to New Relic log file:")
     end
 
     def first

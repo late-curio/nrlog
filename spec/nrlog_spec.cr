@@ -1,9 +1,13 @@
 require "./spec_helper"
 
 describe Nrlog do
-  # TODO: Write tests
 
   it "works" do
-    true.should eq(true)
+    log = Nrlog::AgentLog.new("./spec/logs/nr.log")
+    log.load()
+    session = log.first
+
+    session.transaction_count.should eq 200
+
   end
 end
